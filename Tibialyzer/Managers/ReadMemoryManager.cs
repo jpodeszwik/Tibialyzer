@@ -32,6 +32,7 @@ using System.Data.SQLite;
 
 namespace Tibialyzer {
     public class ReadMemoryResults {
+        public static Dictionary<string, HashSet<string>>  monstersToKill = new Dictionary<string, HashSet<string>>();
         public Dictionary<string, List<string>> itemDrops = new Dictionary<string, List<string>>();
         public Dictionary<string, int> exp = new Dictionary<string, int>();
         public Dictionary<string, Dictionary<string, DamageEntry>> healingDone = new Dictionary<string, Dictionary<string, DamageEntry>>();
@@ -346,7 +347,9 @@ namespace Tibialyzer {
                 return null;
             }
 
+
             results = new ReadMemoryResults();
+
             flashClient = ProcessManager.IsFlashClient();
             skipDuplicateCommands = (flashClient || !SettingsManager.getSettingBool("ScanInternalTabStructure")) && SettingsManager.getSettingBool("SkipDuplicateCommands");
             Dictionary<int, HashSet<long>> newWhitelistedAddresses = null;
@@ -410,6 +413,16 @@ namespace Tibialyzer {
                             if (!res.itemDrops.ContainsKey(t)) res.itemDrops.Add(t, new List<string>());
                             res.itemDrops[t].Add(logMessage);
                             continue;
+                        }
+                        //00:15 Combo! Next: 1. glooth anemone, 2. devourer, 3. glooth golem
+                        //00:30 Consecutive combo!Score x2!Next: 1.devourer, 2.glooth golem, 3.glooth anemone
+                        //00:38 Combo chain! Score x3! Next: 1. glooth anemone, 2. devourer, 3. glooth golem
+                        string withoutTime = logMessage.Substring(6);
+                        if (logMessage.Length > 14 && (withoutTime.StartsWith("Combo!") || withoutTime.StartsWith("Consecutive combo!") || withoutTime.StartsWith("Combo chain!")))
+                        {
+                            var monsters = logMessage.Split(new string[] { "Next: " }, StringSplitOptions.None)[1];
+                            if (!ReadMemoryResults.monstersToKill.ContainsKey(t)) ReadMemoryResults.monstersToKill.Add(t, new HashSet<string>());
+                            ReadMemoryResults.monstersToKill[t].Add(monsters);
                         }
                     } else if (logMessage.Length > 17 && logMessage.Substring(5, 12) == " You gained " && logMessage.EndsWith("experience points.")) {
                         // the message is an experience string, "You gained x experience."

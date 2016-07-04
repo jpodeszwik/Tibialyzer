@@ -104,6 +104,27 @@ namespace Tibialyzer {
                 }
             }
 
+            if (ReadMemoryResults.monstersToKill.Count > 0)
+            {
+                foreach(HashSet<string> res in ReadMemoryResults.monstersToKill.Values)
+                {
+                    if (!res.Contains("")) {
+                        foreach (string str in res.ToList())
+                        {
+                            Console.WriteLine("here i am: " + str);
+                            IEnumerable<Tibialyzer.Creature> monsters = 
+                                str.Split(new string[] { ", " }, StringSplitOptions.None).
+                                Select(item => StorageManager.getCreature(item.Substring(3)));
+
+                            MainForm.mainForm.Invoke((MethodInvoker)delegate {
+                                PopupManager.ShowSimpleNotification(new SimpleTextNotification(monsters.First().image, "Combinatorics", str));
+                            });
+                        }
+                        res.Add("");
+                    }
+                }
+            }
+
             if (readMemoryResults != null && readMemoryResults.newAdvances.Count > 0) {
                 if (SettingsManager.getSettingBool("AutoScreenshotAdvance")) {
                     MainForm.mainForm.Invoke((MethodInvoker)delegate {
