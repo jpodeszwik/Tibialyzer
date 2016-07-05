@@ -125,6 +125,7 @@
       <DependentUpon>HealthBar.cs</DependentUpon>
     </Compile>
     <Compile Include="Managers\AutoHotkeyManager.cs" />
+    <Compile Include="Combinatorics\CombinatoricsManager.cs" />
     <Compile Include="Managers\CommandManager.cs" />
     <Compile Include="Managers\EquipmentManager.cs" />
     <Compile Include="Managers\HUDManager.cs" />
@@ -214,6 +215,9 @@
     </Compile>
     <Compile Include="Popups\PopupContainer.Designer.cs">
       <DependentUpon>PopupContainer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Combinatorics\CombinatoricsNotification.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Popups\SimpleTimerNotification.cs">
       <SubType>Form</SubType>
@@ -505,6 +509,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Popups\PopupContainer.resx">
       <DependentUpon>PopupContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Combinatorics\CombinatoricsNotification.resx">
+      <DependentUpon>CombinatoricsNotification.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
